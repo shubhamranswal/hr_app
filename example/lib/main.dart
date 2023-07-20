@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
@@ -147,38 +148,10 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 }
 
 void main() {
+  configLoading();
   WidgetsFlutterBinding.ensureInitialized();
-
-  /// Application selection:  Select the app to boot:
-  /// - AdvancedApp
-  /// - HelloWorldAp
-  /// - HomeApp
-  ///
-  SharedPreferences.getInstance().then((SharedPreferences prefs) {
-    String? appName = prefs.getString("app");
-
-    // Sanitize old-style registration system that only required username.
-    // If we find a valid username but null orgname, reverse them.
-    String? orgname = prefs.getString("orgname");
-    String? username = prefs.getString("username");
-
-    if (orgname == null && username != null) {
-      prefs.setString("orgname", username);
-      prefs.remove("username");
-    }
-
-    switch (appName) {
-      case AdvancedApp.NAME:
-        runApp(new AdvancedApp());
-        break;
-      case HelloWorldApp.NAME:
-        runApp(new HelloWorldApp());
-        break;
-      default:
-        // Default app.  Renders the application selector home page.
-        runApp(new HomeApp());
-    }
-  });
+  SharedPreferences.getInstance().then((pref) => pref.setString('orgname', "MangosOrange"));
+  runApp(new AdvancedApp());
   TransistorAuth.registerErrorHandler();
 
   /// Register BackgroundGeolocation headless-task.
@@ -187,4 +160,16 @@ void main() {
 
   /// Register BackgroundFetch headless-task.
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 75.0
+    ..radius = 15.0
+    ..userInteractions = false
+    ..maskColor = Colors.greenAccent[100]
+    ..maskType = EasyLoadingMaskType.black
+    ..dismissOnTap = false;
 }

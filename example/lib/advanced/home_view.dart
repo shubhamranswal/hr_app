@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_background_geolocation_example/registration_view.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -289,11 +290,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   // Go back to HomeApp
-  void _onClickHome() {
-    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
-    bg.BackgroundGeolocation.stop();
-    bg.BackgroundGeolocation.removeListeners();
-    runApp(HomeApp());
+  void _onClickEdit() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>RegistrationView()));
+    // bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
+    // bg.BackgroundGeolocation.stop();
+    // bg.BackgroundGeolocation.removeListeners();
+    // runApp(HomeApp());
   }
 
   ////
@@ -437,35 +439,20 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('BG Geo'),
+          title: const Text('MangosOrange'),
           centerTitle: true,
-          leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
+          leading: IconButton(onPressed: _onClickEdit, icon: Icon(Icons.edit, color: Colors.black)),
           backgroundColor: Theme.of(context).bottomAppBarColor,
           foregroundColor: Colors.black,
           actions: <Widget>[
             Switch(value: _enabled!, onChanged: _onClickEnable
             ),
           ],
-          bottom: TabBar(
-              controller: _tabController,
-              indicatorColor: Colors.red,
-              tabs: [
-                Tab(icon: Icon(Icons.map)),
-                Tab(icon: Icon(Icons.list))
-              ]
-          )
       ),
       //body: body,
       body: SharedEvents(
           events: events,
-          child: TabBarView(
-              controller: _tabController,
-              children: [
-                MapView(),
-                EventList()
-              ],
-              physics: new NeverScrollableScrollPhysics()
-          )
+          child: MapView(),
       ),
       bottomNavigationBar: BottomAppBar(
           child: Container(

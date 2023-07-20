@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -196,66 +197,17 @@ class _HomeViewState extends State<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    // EasyLoading.show();
+    // _onClickNavigate("advanced");
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Background Geolocation'),
+          title: const Text('MangosOrange - HR'),
           foregroundColor: Colors.black,
           backgroundColor: Colors.amberAccent
         ),
-        body: Container(
-            color: Colors.black87,
-            padding: EdgeInsets.only(top: 20.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Center(
-                    child: Text("Example Applications",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Expanded(
-                      child: Container(
-                          padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                _buildApplicationButton('Hello World App',
-                                    onPressed: () {
-                                  _onClickNavigate("hello_world");
-                                }),
-                                _buildApplicationButton('Advanced App',
-                                    onPressed: () {
-                                  _onClickNavigate("advanced");
-                                })
-                              ]))),
-                  Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(5.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                                margin: EdgeInsets.all(10.0),
-                                child: Text(
-                                    "These apps will post locations to Transistor Software's demo server.  You can view your tracking in the browser by visiting:")),
-                            Center(
-                                child: Text("${ENV.TRACKER_HOST}/$_orgname",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold))),
-                            Container(
-                                color: Colors.white,
-                                margin: EdgeInsets.all(0.0),
-                                child: new ListTile(
-                                    leading: const Icon(Icons.account_box),
-                                    title: Text("Org: $_orgname"),
-                                    subtitle: Text("Device ID: $_deviceId"),
-                                    selected: true))
-                          ]))
-                ])),
+        body: Center(
+          child: Text(""),
+        ),
         bottomNavigationBar: BottomAppBar(
             color: Colors.white,
             child: Row(
