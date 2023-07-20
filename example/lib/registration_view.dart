@@ -50,10 +50,10 @@ class _RegistrationViewState extends State<RegistrationView> {
     });
   }
 
-  void _onClickClose() {
-    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
-    Navigator.pop(context, null);
-  }
+  // void _onClickClose() {
+  //   bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
+  //   Navigator.pop(context, null);
+  // }
 
   void _onClickSave() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
@@ -79,7 +79,7 @@ class _RegistrationViewState extends State<RegistrationView> {
         bg.Config(transistorAuthorizationToken: token));
     */
 
-    Map result = {"orgname": _orgname, "username": _username};
+    Map result = {"orgname": "MangosOrange", "username": _username};
     Navigator.pop(context, result);
   }
 
@@ -104,22 +104,22 @@ class _RegistrationViewState extends State<RegistrationView> {
 
     return new Scaffold(
       appBar: new AppBar(
-          leading: IconButton(
-              onPressed: _onClickClose,
-              icon: Icon(Icons.close),
-              color: Colors.black),
-          title: const Text('Device Registration', textAlign: TextAlign.right),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.amberAccent,
-          iconTheme: IconThemeData(color: Colors.black),
-          actions: <Widget>[
-            TextButton(
-                onPressed: _onClickSave,
-                child: Text("REGISTER",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blue)),
-                )
-          ]),
+        title: const Text('Device Registration', textAlign: TextAlign.right),
+        foregroundColor: Colors.black,
+        centerTitle: true,
+        leading: Visibility(
+          visible: false,
+          child: Text(""),
+        ),
+        backgroundColor: Colors.orangeAccent,
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orangeAccent,
+        onPressed: _onClickSave,
+        child: Text("Save",
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+      ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -127,10 +127,9 @@ class _RegistrationViewState extends State<RegistrationView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text("$_deviceId",
+              Text("Device\n$_deviceId".toUpperCase(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
                       fontSize: 16.0)),
               TextFormField(
@@ -142,6 +141,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                     return null;
                   }
                 },
+                enabled: false,
                 onChanged: (value) {
                   setState(() {
                     _orgname = value;
@@ -178,8 +178,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                 },
                 autofocus: false,
                 decoration: InputDecoration(
-                    labelText: 'Username',
-                    hintText: 'eg. Github username or initials'),
+                    labelText: 'Name', hintText: 'Full Name Without Space'),
               ),
               Card(
                   margin: EdgeInsets.only(top: 20.0),
@@ -191,14 +190,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Text(
-                            "Please provide an Organization name and User identifier to register your device with the Demo Server."),
-                        const Text(""),
-                        const Text(
-                            "You will access your results at the following url:"),
-                        Text("${ENV.TRACKER_HOST}/$_orgname",
-                            style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                fontWeight: FontWeight.bold)),
+                            "\nPlease provide your full name.\nIf your name is Shubham Ranswal, then write it as ShubhamRanswal.\n"),
                       ],
                     ),
                   )),

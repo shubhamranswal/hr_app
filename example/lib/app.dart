@@ -15,6 +15,7 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
     as bg;
 import 'package:url_launcher/url_launcher.dart';
 
+import 'advanced/home_view.dart';
 import 'config/ENV.dart';
 import 'config/transistor_auth.dart';
 
@@ -39,9 +40,10 @@ class _HomeAppState extends State<HomeApp> {
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
         theme: theme.copyWith(
             colorScheme: theme.colorScheme.copyWith(secondary:Colors.black)),
-        home: new _HomeView());
+        home: new HomeView());
   }
 }
 
@@ -197,50 +199,13 @@ class _HomeViewState extends State<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    // EasyLoading.show();
-    // _onClickNavigate("advanced");
+    EasyLoading.show();
+    _onClickNavigate("advanced");
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('MangosOrange - HR'),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.amberAccent
-        ),
         body: Center(
           child: Text(""),
         ),
-        bottomNavigationBar: BottomAppBar(
-            color: Colors.white,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  SizedBox(
-                    width: 140,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _showRegistration();
-                      },
-                      child: Text('Edit'),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                      )
-                  )),
-                      //color: Colors.redAccent,
-                      //textColor: Colors.white),
-                  SizedBox(
-                      width: 140,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _launchUrl();
-                        },
-                        child: Text('View Tracking'),
-                        style: ButtonStyle(
-                            //foregroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue))
-                        )
-                  )
-                      //color: Colors.blue,
-                      //textColor: Colors.white),
-                ])));
+    );
   }
 
   MaterialButton _buildApplicationButton(String text, {onPressed: Function}) {

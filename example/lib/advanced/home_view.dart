@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_background_geolocation_example/registration_view.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -62,6 +63,13 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         vsync: this
     );
     _tabController?.addListener(_handleTabChange);
+
+    _prefs.then((prefs){
+      String? userName = prefs.getString('username');
+      if (userName==null){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>RegistrationView()));
+      }
+    });
 
     initPlatformState();
   }
@@ -227,6 +235,22 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       }
       BackgroundFetch.finish(taskId);
     });
+  }
+
+  void enableTracking() async {
+    dynamic callback = (bg.State state) async {
+      print('[start] success: $state');
+      setState(() {
+        _enabled = state.enabled;
+        _isMoving = state.isMoving;
+      });
+    };
+    bg.State state = await bg.BackgroundGeolocation.state;
+    if (state.trackingMode == 1) {
+      bg.BackgroundGeolocation.start().then(callback);
+    } else {
+      bg.BackgroundGeolocation.startGeofences().then(callback);
+    }
   }
 
   void _onClickEnable(enabled) async {
@@ -437,51 +461,53 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   @override
   Widget build(BuildContext context) {
+
+    enableTracking();
+
     return Scaffold(
       appBar: AppBar(
           title: const Text('MangosOrange'),
           centerTitle: true,
-          leading: IconButton(onPressed: _onClickEdit, icon: Icon(Icons.edit, color: Colors.black)),
           backgroundColor: Theme.of(context).bottomAppBarColor,
           foregroundColor: Colors.black,
-          actions: <Widget>[
-            Switch(value: _enabled!, onChanged: _onClickEnable
-            ),
-          ],
       ),
       //body: body,
       body: SharedEvents(
           events: events,
           child: MapView(),
       ),
-      bottomNavigationBar: BottomAppBar(
-          child: Container(
-              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-              child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.gps_fixed),
-                      onPressed: _onClickGetCurrentPosition,
-                    ),
-                    TextButton(
-                        child: Text('$_motionActivity · $_odometer km'),
-                        onPressed: _onClickTestMode,
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black)
-                        )
-                    ),
-                    MaterialButton(
-                        minWidth: 50.0,
-                        child: Icon((_isMoving!) ? Icons.pause : Icons.play_arrow, color: Colors.white),
-                        color: (_isMoving!) ? Colors.red : Colors.green,
-                        onPressed: _onClickChangePace
-                    )
-                  ]
-              )
-          )
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orangeAccent,
+        foregroundColor: Colors.black,
+        child: Icon(Icons.gps_fixed_rounded),
+        onPressed: _onClickGetCurrentPosition
       ),
+      // bottomNavigationBar: BottomAppBar(
+      //     child: Container(
+      //         padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+      //         child: Row(
+      //             mainAxisSize: MainAxisSize.max,
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: <Widget>[
+      //
+      //               TextButton(
+      //                   child: Text('$_motionActivity · $_odometer km'),
+      //                   onPressed: _onClickTestMode,
+      //                   style: ButtonStyle(
+      //                     foregroundColor: MaterialStateProperty.all<Color>(Colors.black)
+      //                   )
+      //               ),
+      //               MaterialButton(
+      //                   minWidth: 50.0,
+      //                   child: Icon((_isMoving!) ? Icons.pause : Icons.play_arrow, color: Colors.white),
+      //                   color: (_isMoving!) ? Colors.red : Colors.green,
+      //                   onPressed: _onClickChangePace
+      //               )
+      //             ]
+      //         )
+      //     )
+      // ),
     );
   }
 
